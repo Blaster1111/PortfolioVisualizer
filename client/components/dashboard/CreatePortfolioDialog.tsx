@@ -91,7 +91,7 @@ export default function CreatePortfolioDialog({
       }
       try {
         setIsSearching(true);
-        const results = await searchStocks(searchQuery, token);
+        const results = await searchStocks(searchQuery);
         setSearchResults(results);
       } catch (err) {
         console.error("Error searching stocks:", err);
@@ -110,7 +110,7 @@ export default function CreatePortfolioDialog({
       }
       try {
         setIsBenchmarkSearching(true);
-        const results = await searchStocks(benchmarkSearch, token);
+        const results = await searchStocks(benchmarkSearch);
         const filteredResults = results.filter((item: { type: string }) => item.type === "ETP");
         setBenchmarkResults(filteredResults);
       } catch (err) {
