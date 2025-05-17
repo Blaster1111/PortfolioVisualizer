@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronRight, LineChart, Lock, BarChart3 } from "lucide-react";
 
 export default function LoginButton() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const router = useRouter();
 
   useEffect(() => {

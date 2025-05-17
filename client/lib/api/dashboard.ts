@@ -3,12 +3,12 @@ import { Portfolio, PortfolioInput } from "@/types";
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 const FINHUBIO = process.env.NEXT_PUBLIC_FINHUBIO;
 
-const handleApiError = (error: any) => {
+const handleApiError = (error: Error | unknown) => {
   console.error("API Error:", error);
   throw error;
 };
 
-export async function searchStocks(query: string, token: string) {
+export async function searchStocks(query: string) {
   try {
     console.log(process.env.FINHUBIO);
     const response = await fetch(

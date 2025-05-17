@@ -63,7 +63,7 @@ export default function EditPortfolioDialog({
   twoDaysAgo.setDate(today.getDate() - 2);
   const maxEndDate = format(twoDaysAgo, "yyyy-MM-dd");
 
-  const { register, handleSubmit, reset, setValue, formState: { errors }, watch } = useForm<PortfolioInput>();
+  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<PortfolioInput>();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -213,9 +213,12 @@ export default function EditPortfolioDialog({
       setSearchQuery("");
       setBenchmarkSearch("");
       onClose();
-    } catch (err: any) {
-      setError(err.message || "Failed to update portfolio");
-    } finally {
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Failed to update portfolio");
+      } }finally {
       setIsSubmitting(false);
     }
   };

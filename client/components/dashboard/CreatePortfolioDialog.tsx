@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useRef } from "react";
@@ -17,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, Plus, X, Search } from "lucide-react";
+import { Loader2, Plus, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 
@@ -35,6 +34,10 @@ interface CreatePortfolioDialogProps {
   token: string;
 }
 
+function isErrorWithMessage(error: unknown): error is { message: string } {
+  return typeof error === 'object' && error !== null && 'message' in error;
+}
+
 export default function CreatePortfolioDialog({
   open,
   onClose,
@@ -46,7 +49,7 @@ export default function CreatePortfolioDialog({
   const [stockSymbol, setStockSymbol] = useState("");
   const [stockWeight, setStockWeight] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
-  
+
   const [searchQuery, setSearchQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -55,7 +58,7 @@ export default function CreatePortfolioDialog({
   const [benchmarkResults, setBenchmarkResults] = useState<SearchResult[]>([]);
   const [isBenchmarkSearching, setIsBenchmarkSearching] = useState(false);
   const [isBenchmarkFocused, setIsBenchmarkFocused] = useState(false);
-  
+
   const today = new Date();
   const twoDaysAgo = new Date();
   twoDaysAgo.setDate(today.getDate() - 2);
@@ -64,7 +67,7 @@ export default function CreatePortfolioDialog({
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const benchmarkSearchContainerRef = useRef<HTMLDivElement>(null);
 
-  const { register, handleSubmit, reset, formState: { errors }, setValue, watch } = useForm<PortfolioInput>();
+  const { register, handleSubmit, reset, formState: { errors }, setValue } = useForm<PortfolioInput>();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -77,9 +80,7 @@ export default function CreatePortfolioDialog({
     }
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -88,7 +89,6 @@ export default function CreatePortfolioDialog({
         setSearchResults([]);
         return;
       }
-
       try {
         setIsSearching(true);
         const results = await searchStocks(searchQuery, token);
@@ -99,7 +99,6 @@ export default function CreatePortfolioDialog({
         setIsSearching(false);
       }
     }, 300);
-
     return () => clearTimeout(searchTimer);
   }, [searchQuery, token]);
 
@@ -109,11 +108,10 @@ export default function CreatePortfolioDialog({
         setBenchmarkResults([]);
         return;
       }
-
       try {
         setIsBenchmarkSearching(true);
         const results = await searchStocks(benchmarkSearch, token);
-        const filteredResults = results.filter((item: { type: string; }) => item.type === "ETP");
+        const filteredResults = results.filter((item: { type: string }) => item.type === "ETP");
         setBenchmarkResults(filteredResults);
       } catch (err) {
         console.error("Error searching benchmarks:", err);
@@ -121,7 +119,6 @@ export default function CreatePortfolioDialog({
         setIsBenchmarkSearching(false);
       }
     }, 300);
-
     return () => clearTimeout(searchTimer);
   }, [benchmarkSearch, token]);
 
@@ -142,18 +139,15 @@ export default function CreatePortfolioDialog({
       setError("Stock symbol cannot be empty");
       return;
     }
-
     if (stockWeight <= 0 || stockWeight > 100) {
       setError("Stock weight must be between 1 and 100");
       return;
     }
-
     const totalWeight = stocks.reduce((sum, stock) => sum + stock.weight, 0) + stockWeight;
     if (totalWeight > 100) {
       setError("Total weight cannot exceed 100%");
       return;
     }
-    
     setStocks([...stocks, { symbol: stockSymbol.toUpperCase(), weight: stockWeight }]);
     setStockSymbol("");
     setStockWeight(0);
@@ -171,7 +165,6 @@ export default function CreatePortfolioDialog({
         setError("You must add at least one stock");
         return;
       }
-
       const totalWeight = stocks.reduce((sum, stock) => sum + stock.weight, 0);
       if (totalWeight !== 100) {
         setError(`Total weight must equal 100% (currently ${totalWeight}%)`);
@@ -190,8 +183,12 @@ export default function CreatePortfolioDialog({
       onPortfolioCreated(newPortfolio);
       reset();
       setStocks([]);
-    } catch (err: any) {
-      setError(err.message || "Failed to create portfolio");
+    } catch (err: unknown) {
+      if (isErrorWithMessage(err)) {
+        setError(err.message);
+      } else {
+        setError("Failed to create portfolio");
+      }
     } finally {
       setIsSubmitting(false);
     }

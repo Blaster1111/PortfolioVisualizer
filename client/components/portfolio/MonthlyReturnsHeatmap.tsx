@@ -1,5 +1,4 @@
 import React from 'react';
-import { ResponsiveContainer, Tooltip } from 'recharts';
 
 interface MonthlyReturnsHeatmapProps {
   data: { year: number; month: number; return: number }[];
