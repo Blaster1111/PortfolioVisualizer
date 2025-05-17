@@ -41,6 +41,7 @@ const options: AuthOptions = {
           console.error('Backend token fetch error:', err);
         }
       }
+      console.log(token);
       return token;
     },
     async session({ session, token }) {
