@@ -30,7 +30,7 @@ const options: AuthOptions = {
             name: profile.name,
             image: profile.image,
           });
-
+          console.log(res.data);
           token.backendAccessToken = res.data.accessToken;
           token.user = {
             email: profile.email,
@@ -41,7 +41,6 @@ const options: AuthOptions = {
           console.error('Backend token fetch error:', err);
         }
       }
-      console.log(token);
       return token;
     },
     async session({ session, token }) {
