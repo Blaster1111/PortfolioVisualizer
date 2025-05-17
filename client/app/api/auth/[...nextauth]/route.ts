@@ -1,7 +1,9 @@
+// app/api/auth/[...nextauth]/route.ts
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import axios from 'axios';
 import { AuthOptions } from 'next-auth';
+
 export const authOptions: AuthOptions = {
   providers: [
     GoogleProvider({
@@ -28,11 +30,12 @@ export const authOptions: AuthOptions = {
             name: profile.name,
             image: profile.image,
           });
+
           token.backendAccessToken = res.data.accessToken;
           token.user = {
             email: profile.email,
             name: profile.name,
-            image: profile.image
+            image: profile.image,
           };
         } catch (err) {
           console.error('Backend token fetch error:', err);
@@ -55,5 +58,6 @@ export const authOptions: AuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
+
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
