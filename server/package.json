@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "prisma:generate": "prisma generate",
     "dev": "nodemon --watch \"src/**/*.ts\" --exec \"ts-node\" src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "npm run prisma:generate && node dist/server.js"
   },
   "keywords": [],
   "author": "",
@@ -30,5 +31,6 @@
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
-  }
+  },
+  "postinstall": "prisma generate"
 }
