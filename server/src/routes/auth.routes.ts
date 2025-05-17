@@ -1,7 +1,8 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { handleGoogleAuth } from '../controllers/auth.controllers';
 import { authenticate } from '../middleware/auth.middleware';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../../generated/prisma';
+
 
 export const prisma = new PrismaClient();
 

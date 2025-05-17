@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { generateToken } from '../utils/jwt';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../../generated/prisma';
 
 export const prisma = new PrismaClient();
 

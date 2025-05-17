@@ -1,4 +1,4 @@
-import type { Portfolio, ApiResponse } from "@/types";
+import type { Portfolio } from "@/types";
 
 export interface AnalysisRequestBody {
   start_date: string;
@@ -54,8 +54,8 @@ export async function analyzePortfolio(portfolio: Portfolio, token: string) {
     }
     
     // Format dates properly
-    let startDate = convertDateToISO(portfolio.startDate) || "2020-01-01"; // Default if not specified
-    let endDate = convertDateToISO(portfolio.endDate) || "2025-01-01"; // Default to today
+    const startDate = convertDateToISO(portfolio.startDate) || "2020-01-01"; // Default if not specified
+    const endDate = convertDateToISO(portfolio.endDate) || "2025-01-01"; // Default to today
     
     // Create request body
     const requestBody = {
