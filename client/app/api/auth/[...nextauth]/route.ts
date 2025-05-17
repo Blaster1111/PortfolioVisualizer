@@ -53,12 +53,7 @@ const options: AuthOptions = {
       return session;
     },
     async redirect({ baseUrl }) {
-      const targetUrl = `${baseUrl}/dashboard`;
-      return new Promise<string>(resolve => {
-        setTimeout(() => {
-          resolve(targetUrl);
-        }, 60000); 
-      });
+      return `${baseUrl}/dashboard`;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
