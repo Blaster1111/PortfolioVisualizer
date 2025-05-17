@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+yfinance
+quantstats
+pandas
+numpy
+seaborn
+matplotlib
+pydantic
