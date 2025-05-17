@@ -59,8 +59,13 @@ export default function PortfolioItem({ portfolio, onDelete, onUpdate }: Portfol
 
   const formatDate = (dateString: string | null | undefined) => {
     if (!dateString) return "Not specified";
-    return new Date(dateString).toLocaleDateString();
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
   };
+
 
   return (
     <>
@@ -82,11 +87,11 @@ export default function PortfolioItem({ portfolio, onDelete, onUpdate }: Portfol
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
               <h3 className="text-sm font-medium text-gray-500">Start Date</h3>
-              <p>{formatDate(portfolio.startDate)}</p>
+              <p>{(formatDate(portfolio.startDate))}</p>
             </div>
             <div>
               <h3 className="text-sm font-medium text-gray-500">End Date</h3>
-              <p>{formatDate(portfolio.endDate)}</p>
+              <p>{(formatDate(portfolio.endDate))}</p>
             </div>
           </div>
           <div>
