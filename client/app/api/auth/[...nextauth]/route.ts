@@ -3,7 +3,6 @@ import GoogleProvider from 'next-auth/providers/google';
 import axios from 'axios';
 import { AuthOptions } from 'next-auth';
 
-// Configure the authentication options
 const options: AuthOptions = {
   providers: [
     GoogleProvider({
